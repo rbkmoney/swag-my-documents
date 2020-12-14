@@ -29,12 +29,9 @@ get:
     '200':
       description: Найденные документы
       schema:
-        type: object
-          properties:
-            result:
-              type: array
-              items:
-                $ref: '#/definitions/Document'
+        type: array
+        items:
+          $ref: '#/definitions/Document'
     '400':
       ref: '#/responses/DefaultLogicError'
     '401':
