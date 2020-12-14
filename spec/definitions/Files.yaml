@@ -1,0 +1,15 @@
+type: object
+required:
+  - id
+  - filename
+properties:
+  id:
+    description: Идентификатор файла
+    type: string
+    maxLength: 40
+    minLength: 1
+  filename:
+    description: Имя файла
+    type: string
+    maxLength: 1000
+    minLength: 1

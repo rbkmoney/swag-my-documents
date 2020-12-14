@@ -1,0 +1,43 @@
+get:
+  description: Получить список документов по магазину
+  tags:
+    - Documents
+  operationId: getDocuments
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/deadline'
+    - $ref: '#/parameters/partyIDQuery'
+    - $ref: '#/parameters/shopIDQuery'
+    - $ref: '#/parameters/shopIDs'
+    - $ref: '#/parameters/paymentInstitutionRealm'
+    - name: documentsType
+      description: Тип документов
+      in: query
+      required: true
+      type: array
+      items:
+        type: string
+        enum:
+          - tariffAgreement
+          - identityCardHeadOfOrganization
+          - statementShareholdersRegister
+          - locationInformation
+          - clientQuestionnaire
+          - financialPosition
+          - businessReputation
+  responses:
+    '200':
+      description: Найденные документы
+      schema:
+        type: object
+          properties:
+            result:
+              type: array
+              items:
+                $ref: '#/definitions/Document'
+    '400':
+      ref: '#/responses/DefaultLogicError'
+    '401':
+      $ref: '#/responses/Unauthorized'
+    '404':
+      $ref: '#/responses/NotFound'

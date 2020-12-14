@@ -1,0 +1,215 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: RBKmoney Documents API
+  description: >
+    ## Описание
+
+    RBKmoney Documents API служит для получения документов мерчанта.
+
+  termsOfService: 'https://rbk.money/'
+  contact:
+    name: RBKmoney support team
+    email: support@rbk.money
+    url: 'https://api.rbk.money'
+host: api.rbk.money
+basePath: /lk/v1
+schemes:
+  - https
+consumes:
+  - application/json; charset=utf-8
+produces:
+  - application/json; charset=utf-8
+securityDefinitions:
+  bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: >
+      Для аутентификации вызовов мы используем [JWT](https://jwt.io).
+      Cоответствующий ключ передается в заголовке.
+
+      ```shell
+       Authorization: Bearer {JWT}
+      ```
+
+      Посмотреть ваш API-ключ вы можете в [личном
+      кабинете](https://dashboard.rbk.money/).
+
+
+      Помните, что вы никому не должны передавать ваш API ключ!
+security:
+  - bearer: []
+responses:
+  NotFound:
+    description: Заданный ресурс не найден
+    schema:
+      $ref: '#/definitions/GeneralError'
+  Unauthorized:
+    description: Ошибка авторизации
+  DefaultLogicError:
+    description: Неверные данные
+    schema:
+      $ref: '#/definitions/DefaultLogicError'
+parameters:
+  accountID:
+    name: accountID
+    in: path
+    description: Account ID
+    required: true
+    type: integer
+    format: int64
+  requestID:
+    name: X-Request-ID
+    in: header
+    description: Уникальный идентификатор запроса к системе
+    required: true
+    type: string
+    maxLength: 32
+    minLength: 1
+  shopIDQuery:
+    name: shopID
+    in: query
+    description: Идентификатор магазина
+    required: false
+    type: string
+    maxLength: 40
+    minLength: 1
+  shopIDPath:
+    name: shopID
+    in: path
+    description: Идентификатор магазина
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  partyIDQuery:
+    name: partyID
+    in: query
+    description: Уникальный идентификатор участника в рамках платформы
+    required: false
+    type: string
+    maxLength: 40
+    minLength: 1
+  deadline:
+    name: X-Request-Deadline
+    in: header
+    description: Максимальное время обработки запроса
+    required: false
+    type: string
+    maxLength: 40
+    minLength: 1
+  shopIDs:
+    name: shopIDs
+    in: query
+    description: Идентификаторы магазинов
+    required: false
+    type: array
+    items:
+      type: string
+  documentsType:
+    name: documentsType
+    in: query
+    description: Тип документа
+    required: true
+    type: string
+    enum:
+      - tariffAgreement
+      - identityCardHeadOfOrganization
+      - statementShareholdersRegister
+      - locationInformation
+      - clientQuestionnaire
+      - financialPosition
+      - businessReputation
+  documentID:
+    name: documentID
+    in: path
+    description: Идентификатор документа
+    required: true
+    type: integer
+    format: int64
+  fileID:
+    name: fileID
+    in: path
+    description: Идентификатор файла
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  paymentInstitutionRealm:
+    name: paymentInstitutionRealm
+    in: query
+    description: Тип магазина, тестовый или «боевой»
+    required: false
+    type: string
+    enum:
+      - live
+      - test
+tags:
+  - name: Documents
+    x-displayName: Документы
+    description: ""
+  - name: Error Codes
+    x-displayName: Коды ошибок
+    description: >
+
+      ## Ошибки бизнес-логики
+
+      Все ошибки бизнес-логики имеют следуюший вид:
+
+        ```json
+        {
+          "code": "string",
+          "message": "string"
+        }
+        ```
+
+      В поле `code` содержится тип ошибки, а в `message` - дополнительная
+      информация по произошедшей ошибке.
+
+      На данный момент существуют следующие коды ошибок:
+
+        | Код                              | Описание                                                                                                                              |
+        | ---                              | --------                                                                                                                              |
+        | **invalidDeadline**              | Неверный формат максимального времени обработки запроса.                                                                              |
+        | **ambiguousPartyID**             | Невозможно однозначно определить идентификатор участника, укажите идентификатор в запросе явно.                                       |
+        | **invalidPartyID**               | Участник с указанным идентификатором не существует или недоступен.                                                                    |
+        | **invalidRequest**               | Прочие неверные данные запроса.                                                                                                       |
+
+      ## Общие ошибки
+
+      Ошибки возникающие при попытках совершения операций с
+      незарегистрированными в системе объектами. Имеют вид
+
+        ```json
+        {
+            "message": "string"
+        }
+        ```
+
+      В поле `message` содержится информация по произошедшей ошибке. Например:
+
+        ```json
+        {
+            "message": "Invalid token"
+        }
+        ```
+
+      ## Ошибки обработки запросов
+
+      В процессе обработки запросов силами нашей платформы могут происходить
+      различные непредвиденные ситуации. Об их появлении платформа сигнализирует
+      по протоколу HTTP соответствующими [статусами][5xx], обозначающими ошибки
+      сервера.
+
+        |  Код    |  Описание  |
+        | ------- | ---------- |
+        | **500** | В процессе обработки платформой запроса возникла непредвиденная ситуация. При получении подобного кода ответа мы рекомендуем обратиться в техническую поддержку. |
+        | **503** | Платформа временно недоступна и не готова обслуживать данный запрос. Запрос гарантированно не выполнен, при получении подобного кода ответа попробуйте выполнить его позднее, когда доступность платформы будет восстановлена. |
+        | **504** | Платформа превысила допустимое время обработки запроса, результат запроса не определён. Попробуйте отправить запрос повторно или выяснить результат выполнения исходного запроса, если повторное исполнение запроса нежелательно. |
+
+      [5xx]: https://tools.ietf.org/html/rfc7231#section-6.6
+
+
+      Если вы получили ошибку, которой нет в данном описании, обратитесь в
+      техническую поддержку.

@@ -1,0 +1,20 @@
+get:
+  description: Получить файлы по идентификатору типа документа
+  tags:
+    - Documents
+  operationId: getDocumentByID
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/deadline'
+    - $ref: '#/parameters/documentID'
+  responses:
+    '200':
+      description: Найденные документы
+      schema:
+        $ref: '#/definitions/Document'
+    '404':
+      $ref: '#/responses/NotFound'
+    '401':
+      $ref: '#/responses/Unauthorized'
+    '400':
+      $ref: '#/responses/DefaultLogicError'

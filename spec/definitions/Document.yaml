@@ -1,0 +1,41 @@
+type: object
+required:
+  - id
+  - expirationDate
+  - documentsType
+  - partyID
+  - files
+properties:
+  id:
+    description: Идентификатор документа
+    type: integer
+    format: int64
+  expirationDate:
+    description: Дата окончания срока действия
+    type: string
+    format: date
+  documentsType:
+    description: Тип документа
+    type: string
+    enum:
+      - tariffAgreement
+      - identityCardHeadOfOrganization
+      - statementShareholdersRegister
+      - locationInformation
+      - clientQuestionnaire
+      - financialPosition
+      - businessReputation
+  partyID:
+    description: Идентификатор участника
+    type: string
+    maxLength: 40
+    minLength: 1
+  shopID:
+    description: Идентификатор магазина
+    type: string
+    maxLength: 40
+    minLength: 1
+  files:
+    type: array
+    items:
+      $ref: '#/definitions/Files'
