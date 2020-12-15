@@ -21,7 +21,7 @@ get:
               results:
                 type: array
                 items:
-                $ref: '../schemas/Document.yaml'
+                  $ref: '../schemas/Document.yaml'
     '400':
       $ref: '../components/responses/DefaultLogicError.yaml'
     '401':
