@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: RBKmoney Documents API
+  description: >
+    ## Описание
+
+    RBKmoney Documents API служит для получения документов мерчанта.
+
+  termsOfService: 'https://rbk.money/'
+  contact:
+    name: RBKmoney support team
+    email: support@rbk.money
+    url: 'https://developer.rbk.money'
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+components:
+  securitySchemes:
+    bearer:
+      $ref: './components/security-schemes/Bearer.yaml'
+paths:
+  /documents:
+    $ref: ./paths/documents.yaml
+tags:
+  - name: Documents
+    x-displayName: Документы
+servers:
+  - url: 'https://api.rbk.money/lk/v1'

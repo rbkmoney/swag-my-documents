@@ -4,13 +4,10 @@ get:
     - Documents
   operationId: getDocuments
   parameters:
-    - $ref: '#/parameters/requestID'
-    - $ref: '#/parameters/deadline'
-    - $ref: '#/parameters/partyIDQuery'
-    - $ref: '#/parameters/shopIDQuery'
-    - $ref: '#/parameters/shopIDs'
-    - $ref: '#/parameters/paymentInstitutionRealm'
-    - name: documentsType
+    - $ref: '../components/parameters/requestId.yaml'
+    - $ref: '../components/parameters/deadline.yaml'
+    - $ref: '../components/parameters/partyIDQuery.yaml'
+    - name: documentType
       description: Тип документов
       in: query
       required: true
@@ -31,10 +28,10 @@ get:
       schema:
         type: array
         items:
-          $ref: '#/definitions/Document'
+          $ref: '../schemas/Document.yaml'
     '400':
-      ref: '#/responses/DefaultLogicError'
+      ref: '../components/responses/DefaultLogicError.yaml'
     '401':
-      $ref: '#/responses/Unauthorized'
+      description: Ошибка авторизации
     '404':
-      $ref: '#/responses/NotFound'
+      description: Заданный ресурс не найден

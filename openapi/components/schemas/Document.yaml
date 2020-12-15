@@ -2,8 +2,7 @@ type: object
 required:
   - id
   - expirationDate
-  - documentsType
-  - partyID
+  - documentType
   - files
 properties:
   id:
@@ -14,7 +13,7 @@ properties:
     description: Дата окончания срока действия
     type: string
     format: date
-  documentsType:
+  documentType:
     description: Тип документа
     type: string
     enum:
@@ -30,12 +29,7 @@ properties:
     type: string
     maxLength: 40
     minLength: 1
-  shopID:
-    description: Идентификатор магазина
-    type: string
-    maxLength: 40
-    minLength: 1
   files:
     type: array
     items:
-      $ref: '#/definitions/Files'
+      $ref: '../schemas/File.yaml'
