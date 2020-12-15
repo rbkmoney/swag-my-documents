@@ -18,6 +18,12 @@ build('swag-my-documents', 'docker-host') {
       }
     }
 
+    runStage('install-deps') {
+      withWsCache("node_modules") {
+        sh 'make wc_install'
+      }
+    }
+
     runStage('build') {
       sh 'make wc_build'
     }
