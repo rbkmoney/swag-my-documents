@@ -3,13 +3,13 @@
 
 build('swag-my-documents', 'docker-host') {
   checkoutRepo()
-  loadBuildUtils('build-utils')
+  loadBuildUtils('build_utils')
 
   def pipeDefault
   def withWsCache
   def gitUtils
   runStage('load pipeline') {
-    env.JENKINS_LIB = "build-utils/jenkins_lib"
+    env.JENKINS_LIB = "build_utils/jenkins_lib"
     pipeDefault = load("${env.JENKINS_LIB}/pipeDefault.groovy")
     withWsCache = load("${env.JENKINS_LIB}/withWsCache.groovy")
     gitUtils = load("${env.JENKINS_LIB}/gitUtils.groovy")
