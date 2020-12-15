@@ -1,8 +1,7 @@
-partyIDQuery:
-  name: partyID
-  in: query
-  description: Уникальный идентификатор участника в рамках платформы
-  required: false
+name: partyID
+in: query
+description: Уникальный идентификатор участника в рамках платформы
+required: false
 schema:
   type: string
   maxLength: 40

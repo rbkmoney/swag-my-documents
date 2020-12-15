@@ -1,5 +1,5 @@
 get:
-  description: Получить список документов по магазину
+  summary: Получить список документов по магазину
   tags:
     - Documents
   operationId: getDocuments
@@ -7,30 +7,23 @@ get:
     - $ref: '../components/parameters/requestId.yaml'
     - $ref: '../components/parameters/deadline.yaml'
     - $ref: '../components/parameters/partyIDQuery.yaml'
-    - name: documentType
-      description: Тип документов
-      in: query
-      required: true
-      type: array
-      items:
-        type: string
-        enum:
-          - tariffAgreement
-          - identityCardHeadOfOrganization
-          - statementShareholdersRegister
-          - locationInformation
-          - clientQuestionnaire
-          - financialPosition
-          - businessReputation
+    - $ref: '../components/parameters/documentType.yaml'
   responses:
     '200':
       description: Найденные документы
-      schema:
-        type: array
-        items:
-          $ref: '../schemas/Document.yaml'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - results
+            properties:
+              results:
+                type: array
+                items:
+                $ref: '../schemas/Document.yaml'
     '400':
-      ref: '../components/responses/DefaultLogicError.yaml'
+      $ref: '../components/responses/DefaultLogicError.yaml'
     '401':
       description: Ошибка авторизации
     '404':
