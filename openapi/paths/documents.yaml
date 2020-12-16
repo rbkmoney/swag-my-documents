@@ -1,0 +1,30 @@
+get:
+  summary: Получить список документов по магазину
+  tags:
+    - Documents
+  operationId: getDocuments
+  parameters:
+    - $ref: '../components/parameters/requestId.yaml'
+    - $ref: '../components/parameters/deadline.yaml'
+    - $ref: '../components/parameters/partyIDQuery.yaml'
+    - $ref: '../components/parameters/documentType.yaml'
+  responses:
+    '200':
+      description: Найденные документы
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - results
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '../components/schemas/Document.yaml'
+    '400':
+      $ref: '../components/responses/DefaultLogicError.yaml'
+    '401':
+      description: Ошибка авторизации
+    '404':
+      description: Заданный ресурс не найден

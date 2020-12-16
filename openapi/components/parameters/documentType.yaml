@@ -1,0 +1,16 @@
+name: documentType
+in: query
+description: Тип документов
+required: true
+schema:
+  type: array
+  items:
+    type: string
+    enum:
+      - tariffAgreement
+      - identityCardHeadOfOrganization
+      - statementShareholdersRegister
+      - locationInformation
+      - clientQuestionnaire
+      - financialPosition
+      - businessReputation
