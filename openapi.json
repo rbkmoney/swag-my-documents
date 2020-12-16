@@ -1,0 +1,251 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "1.0.0",
+    "title": "RBKmoney Documents API",
+    "description": "## Описание\nRBKmoney Documents API служит для получения документов мерчанта.\n",
+    "termsOfService": "https://rbk.money/",
+    "contact": {
+      "name": "RBKmoney support team",
+      "email": "support@rbk.money",
+      "url": "https://developer.rbk.money"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Для аутентификации вызовов мы используем [JWT](https://jwt.io). Токен доступа передается в заголовке.\n```shell\n Authorization: Bearer {JWT}\n```\nЗапросы к данному API авторизуются сессионным токеном доступа, который вы получаете в результате аутентификации в личном кабинете по адресу https://dashboard.rbk.money/.\n"
+      }
+    },
+    "parameters": {
+      "requestId": {
+        "name": "X-Request-ID",
+        "in": "header",
+        "description": "Уникальный идентификатор запроса к системе",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 64
+        }
+      },
+      "deadline": {
+        "name": "X-Request-Deadline",
+        "in": "header",
+        "description": "Максимальное время обработки запроса",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        }
+      },
+      "partyIDQuery": {
+        "name": "partyID",
+        "in": "query",
+        "description": "Уникальный идентификатор участника в рамках платформы",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "maxLength": 40,
+          "minLength": 1
+        }
+      },
+      "documentType": {
+        "name": "documentType",
+        "in": "query",
+        "description": "Тип документов",
+        "required": true,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "tariffAgreement",
+              "identityCardHeadOfOrganization",
+              "statementShareholdersRegister",
+              "locationInformation",
+              "clientQuestionnaire",
+              "financialPosition",
+              "businessReputation"
+            ]
+          }
+        }
+      }
+    },
+    "schemas": {
+      "File": {
+        "type": "object",
+        "required": [
+          "id",
+          "filename"
+        ],
+        "properties": {
+          "id": {
+            "description": "Идентификатор файла",
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 1
+          },
+          "filename": {
+            "description": "Имя файла",
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 1
+          }
+        }
+      },
+      "Document": {
+        "type": "object",
+        "required": [
+          "id",
+          "expirationDate",
+          "documentType",
+          "partyID",
+          "files"
+        ],
+        "properties": {
+          "id": {
+            "description": "Идентификатор документа",
+            "type": "integer",
+            "format": "int64"
+          },
+          "expirationDate": {
+            "description": "Дата окончания срока действия",
+            "type": "string",
+            "format": "date"
+          },
+          "documentType": {
+            "description": "Тип документа",
+            "type": "string",
+            "enum": [
+              "tariffAgreement",
+              "identityCardHeadOfOrganization",
+              "statementShareholdersRegister",
+              "locationInformation",
+              "clientQuestionnaire",
+              "financialPosition",
+              "businessReputation"
+            ]
+          },
+          "partyID": {
+            "description": "Идентификатор участника",
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 1
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/File"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "DefaultLogicError": {
+        "description": "Ошибка бизнес-логики",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Ошибка в переданных данных",
+              "type": "object",
+              "required": [
+                "code"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "enum": [
+                    "invalidRequest",
+                    "invalidDeadline",
+                    "invalidPartyID"
+                  ]
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/documents": {
+      "get": {
+        "summary": "Получить список документов по магазину",
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "getDocuments",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestId"
+          },
+          {
+            "$ref": "#/components/parameters/deadline"
+          },
+          {
+            "$ref": "#/components/parameters/partyIDQuery"
+          },
+          {
+            "$ref": "#/components/parameters/documentType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Найденные документы",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "results"
+                  ],
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Document"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultLogicError"
+          },
+          "401": {
+            "description": "Ошибка авторизации"
+          },
+          "404": {
+            "description": "Заданный ресурс не найден"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Documents",
+      "x-displayName": "Документы"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://api.rbk.money/lk/v1"
+    }
+  ]
+}
