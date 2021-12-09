@@ -5,14 +5,14 @@ info:
   description: |
     ## Описание
     RBKmoney Documents API служит для получения документов мерчанта.
-  termsOfService: 'https://rbk.money/'
+  termsOfService: https://rbk.money/
   contact:
     name: RBKmoney support team
     email: support@rbk.money
-    url: 'https://developer.rbk.money'
+    url: https://developer.rbk.money
   license:
     name: Apache 2.0
-    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
 components:
   securitySchemes:
     bearer:
@@ -184,4 +184,4 @@ tags:
   - name: Documents
     x-displayName: Документы
 servers:
-  - url: 'https://api.rbk.money/lk/v1'
+  - url: https://api.rbk.money/lk/v1
